@@ -1,17 +1,52 @@
 class ContactsController < ApplicationController
-  def one
-    @contact = Contact.find(1)
-  end
 
-  def many
+  def index
     @contacts = Contact.all
   end
 
-  def new_contact_form
+  def new
     
   end
 
-  def make_new_contact
-    @contact = "#{params[:first_name]} #{params[:last_name]} - #{params[:phone_number]}"
+  def create
+    contact = Contact.create(
+        first_name: params[:first_name],
+        last_name: params[:last_name],
+        email: params[:email],
+        phone_number: params[:phone_number]
+      )
+
+    flash[:success] = "Contact Created"
+    redirect_to "/contacts/#{contact.id}"
+  end
+
+  def show
+    @contact = Contact.find(params[:id])
+  end
+
+  def edit
+    @contact = Contact.find(params[:id])
+  end
+
+  def update
+    contact = Contact.find(params[:id])
+
+    contact.update(
+        first_name: params[:first_name],
+        last_name: params[:last_name],
+        email: params[:email],
+        phone_number: params[:phone_number]
+      )
+
+    flash[:success] = "Contact Updated"
+    redirect_to "/contacts/#{contact.id}"
+  end
+
+  def destroy
+    contact = Contact.find(params[:id])
+    contact.destroy
+
+    flash[:warning] = "Contact Destroyed"
+    redirect_to '/'
   end
 end
